@@ -11,6 +11,7 @@ mainRouter.use(`/${ROUTES.signUp}`, signUpRouter);
 
 mainRouter.get('/', (req: Request, res: Response) => {
   console.log('Main Router');
+  res.send('<h1>Main Router</h1>')
 });
 
 export default mainRouter;
