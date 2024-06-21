@@ -6,15 +6,18 @@ import axios, {
 } from 'axios';
 
 import { consoleError } from '../Error/consoleError.js';
-import { ErrorTypes } from '../Error/types.js';
+import ErrorTypes from '../Error/types.js';
 
 class FetcherRoot {
   private static instance: FetcherRoot;
+
   private cache: Record<
     string,
     { time: number; payload: AxiosResponse['data'] }
   > = {};
+
   private SUCCESS_STATUS_CODE = 200;
+
   private SUCCESS_STATUS_CODE_POST = 201;
 
   public static getInstance(): FetcherRoot {
@@ -24,13 +27,14 @@ class FetcherRoot {
     return this.instance;
   }
 
-  public getEndpoint(url: string) {
+  public static getEndpoint(url: string) {
     try {
       return new URL(url).pathname;
     } catch {
       return url.split('?')[0];
     }
   }
+
   public get<P>(
     url: string,
     baseUrl?: string,
@@ -49,9 +53,9 @@ class FetcherRoot {
         .get<AxiosResponse>(originalUrl, { params })
         .then((response: AxiosResponse) => {
           const endPoint = this.getEndpoint(originalUrl);
-          const status = response.status;
-          const statusText = response.statusText;
-          const data = response.data;
+          const { status } = response;
+          const { statusText } = response;
+          const { data } = response;
           if (status !== this.SUCCESS_STATUS_CODE) {
             throw new Error(
               `⚠ Error ${status}: ${statusText} while fetching ${endPoint}`
@@ -71,6 +75,7 @@ class FetcherRoot {
     };
     return this.cache[originalUrl].payload as Promise<P>;
   }
+
   public post<P>(
     url: string,
     data: unknown,
@@ -85,8 +90,8 @@ class FetcherRoot {
       .post<AxiosResponse>(originalUrl, data, config)
       .then((response: AxiosResponse) => {
         const endPoint = this.getEndpoint(originalUrl);
-        const status = response.status;
-        const statusText = response.statusText;
+        const { status } = response;
+        const { statusText } = response;
         if (status !== this.SUCCESS_STATUS_CODE_POST) {
           throw new Error(
             `⚠ Error ${status}: ${statusText} while posting ${endPoint}`
@@ -106,4 +111,6 @@ class FetcherRoot {
     return postResponse as Promise<P>;
   }
 }
-export const Fetcher = FetcherRoot.getInstance();
+const Fetcher = FetcherRoot.getInstance();
+
+export default Fetcher;

@@ -1,8 +1,9 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 
 import ROUTES from '../constants.js';
 import loginRouter from '../login/router.js';
 import signUpRouter from '../signup/router.js';
+
 import MainController from './controller.js';
 
 const mainRouter = express.Router();
