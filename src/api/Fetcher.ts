@@ -52,7 +52,7 @@ class FetcherRoot {
       payload: axios
         .get<AxiosResponse>(originalUrl, { params })
         .then((response: AxiosResponse) => {
-          const endPoint = this.getEndpoint(originalUrl);
+          const endPoint = FetcherRoot.getEndpoint(originalUrl);
           const { status } = response;
           const { statusText } = response;
           const { data } = response;
@@ -64,7 +64,7 @@ class FetcherRoot {
           return data;
         })
         .catch((e: AxiosError | Error) => {
-          const endPoint = this.getEndpoint(originalUrl);
+          const endPoint = FetcherRoot.getEndpoint(originalUrl);
           const errorMessage = `${e.message} while fetching ${endPoint}`;
           if (isAxiosError(e)) {
             consoleError(ErrorTypes.axios, e.code, errorMessage);
@@ -89,7 +89,7 @@ class FetcherRoot {
     const postResponse = axios
       .post<AxiosResponse>(originalUrl, data, config)
       .then((response: AxiosResponse) => {
-        const endPoint = this.getEndpoint(originalUrl);
+        const endPoint = FetcherRoot.getEndpoint(originalUrl);
         const { status } = response;
         const { statusText } = response;
         if (status !== this.SUCCESS_STATUS_CODE_POST) {
@@ -100,7 +100,7 @@ class FetcherRoot {
         return response.data;
       })
       .catch((e: AxiosError | Error) => {
-        const endPoint = this.getEndpoint(originalUrl);
+        const endPoint = FetcherRoot.getEndpoint(originalUrl);
         const errorMessage = `${e.message} while posting ${endPoint}`;
         if (isAxiosError(e)) {
           consoleError(ErrorTypes.axios, e.code, errorMessage);

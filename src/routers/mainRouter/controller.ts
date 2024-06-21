@@ -5,8 +5,12 @@ import modal from './modal.js';
 const controller = {
   fetchDataTest: async (req: Request, res: Response) => {
     console.log('Main Router');
-    const data = await modal.getJsonData();
-    res.send(data);
+    try {
+      const data = await modal.getJsonData();
+      res.send(data);
+    } catch (error) {
+      res.status(404);
+    }
   },
 };
 
